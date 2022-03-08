@@ -24,9 +24,9 @@ const Course = mongoose.model("Course", courseSchema);
 
 async function createCourse() {
   const course = new Course({
-    name: "Angular Course",
-    author: "Mosh",
-    tags: ["angular", "frontend"],
+    name: "React Course",
+    author: "Maximillian",
+    tags: ["react", "frontend"],
     isPublished: true,
   });
 
@@ -34,4 +34,31 @@ async function createCourse() {
   console.log(result);
 }
 
-// createCourse();
+async function getCourses() {
+  // eq (equal)
+  // ne (not equal)
+  // gt (greater than)
+  // gte (grenter than equal)
+  // lt (less than)
+  // lte (less than equal)
+  // in
+  // nin (not in)
+  const pageNumber = 2;
+  const pageSize = 10;
+
+  // const courses = await Courses.find({ price: { $gt: 10, $lte: 20 } });
+  // const courses = await Courses.find({ price: { $in: [10,15,20] } });
+  // const courses = await Course.find({ author: "Mosh", isPublished: true }) //basic
+  // const courses = await Course.find().or([{ author: "Mosh" }, { isPublished: true }]) //basic
+  // const courses = await Course.find({ author: /^Mos/ }) // starts with
+  // const courses = await Course.find({ author: /sh$/i }) // ends with, case insensitive
+  const courses = await Course.find({ author: /.*Mosh.*/i }) // contains
+    .skin((pageNumber - 1) * pageSize)
+    .limit(pageSize) // limit
+    .sort({ name: 1 }) // 1 asc, -1 desc
+    // .select({ name: 1, tags: 1 }); // return properties
+    .count();
+  console.log(courses);
+}
+
+getCourses();
